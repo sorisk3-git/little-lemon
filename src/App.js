@@ -1,14 +1,18 @@
-import './App.css';
+//import './App.css';
+
+import React, { useState } from "react";
+import { TaskList } from "./components/TaskList";
 
 function App() {
-  return (
-    <div className="App">
-     <h1>Project</h1>
-     <h2>Welcome!</h2>
-     <h3>Amazing day!</h3>
-     <h4>damn</h4>
-    </div>
-  );
+  
+  const [tasks, setTasks] = useState([
+    { id: 1, task: "Go shopping", done: true },
+    { id: 2, task: "Wash dishes", done: false },
+  ]);
+
+  return (
+    <TaskList tasks={tasks} />
+  )
 }
 
 export default App;
