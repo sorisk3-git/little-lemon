@@ -1,3 +1,5 @@
+/* global submitAPI */
+
 import React, { useState } from 'react';
 
 function BookingForm({ availableTimes = [], dispatch }) {
@@ -6,19 +8,42 @@ function BookingForm({ availableTimes = [], dispatch }) {
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState('');
 
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!date) newErrors.date = 'Please select a date.';
+    if (!time) newErrors.time = 'Please select a time.';
+    if (guests < 1 || guests > 10) newErrors.guests = 'Guests must be between 1 and 10.';
+    if (!occasion) newErrors.occasion = 'Please select an occasion.';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     setDate(selectedDate);
     if (dispatch) {
-      dispatch(selectedDate); // Safely dispatch if available
+      dispatch(selectedDate);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const formData = { date, time, guests, occasion };
     console.log('Form submitted:', formData);
-    // Future: send formData to an API
+
+    const success = submitAPI(formData);
+    if (success) {
+      alert('Reservation submitted successfully!');
+      // Optionally reset form here
+    } else {
+      alert('Submission failed. Please try again.');
+    }
   };
 
   return (
@@ -30,6 +55,7 @@ function BookingForm({ availableTimes = [], dispatch }) {
         value={date}
         onChange={handleDateChange}
       />
+      {errors.date && <span className="error">{errors.date}</span>}
 
       <label htmlFor="res-time">Choose time</label>
       <select
@@ -37,16 +63,14 @@ function BookingForm({ availableTimes = [], dispatch }) {
         value={time}
         onChange={(e) => setTime(e.target.value)}
       >
-        {availableTimes.length > 0 ? (
-          availableTimes.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))
-        ) : (
-          <option value="">No times available</option>
-        )}
+        <option value="">Select a time</option>
+        {availableTimes.map((t) => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
       </select>
+      {errors.time && <span className="error">{errors.time}</span>}
 
       <label htmlFor="guests">Number of guests</label>
       <input
@@ -58,6 +82,7 @@ function BookingForm({ availableTimes = [], dispatch }) {
         value={guests}
         onChange={(e) => setGuests(Number(e.target.value))}
       />
+      {errors.guests && <span className="error">{errors.guests}</span>}
 
       <label htmlFor="occasion">Occasion</label>
       <select
@@ -69,6 +94,7 @@ function BookingForm({ availableTimes = [], dispatch }) {
         <option value="Birthday">Birthday</option>
         <option value="Anniversary">Anniversary</option>
       </select>
+      {errors.occasion && <span className="error">{errors.occasion}</span>}
 
       <input type="submit" value="Make Your reservation" />
     </form>

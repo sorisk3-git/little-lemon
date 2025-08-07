@@ -54,4 +54,12 @@
     font-size: 15px;
     padding: 12px;
   }
+
+  .error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
 }
