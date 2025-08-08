@@ -31,6 +31,16 @@
   background-color: #005fa3;
 }
 
+.booking-form input[type="submit"]:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+}
+
+.booking-form input[type="submit"]:disabled:hover {
+  background-color: #cccccc;
+}
+
 /* 🌐 Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
   .booking-form {

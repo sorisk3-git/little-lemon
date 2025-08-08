@@ -4,6 +4,17 @@ function BookingForm({ availableTimes, date, setDate }) {
   const [time, setTime] = useState('');
   const [guests, setGuests] = useState(1);
   const [occasion, setOccasion] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!date) newErrors.date = 'Please select a date.';
+    if (!time) newErrors.time = 'Please select a time.';
+    if (guests < 1 || guests > 10) newErrors.guests = 'Guests must be between 1 and 10.';
+    if (!occasion) newErrors.occasion = 'Please select an occasion.';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleDateChange = (e) => {
     const selectedDate = new Date(e.target.value);
@@ -12,32 +23,38 @@ function BookingForm({ availableTimes, date, setDate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission here
+    if (!validateForm()) return;
     const formData = { date, time, guests, occasion };
     console.log('Form submitted:', formData);
   };
 
+  const isFormValid = date && time && guests >= 1 && guests <= 10 && occasion;
+
   return (
-    <form className="booking-form" onSubmit={handleSubmit}>
+    <form className="booking-form" onSubmit={handleSubmit} noValidate>
       <label htmlFor="res-date">Choose date</label>
       <input
         type="date"
         id="res-date"
         value={date.toISOString().split('T')[0]}
         onChange={handleDateChange}
+        required
       />
+      {errors.date && <span className="error">{errors.date}</span>}
 
       <label htmlFor="res-time">Choose time</label>
       <select
         id="res-time"
         value={time}
         onChange={e => setTime(e.target.value)}
+        required
       >
         <option value="">Select a time</option>
         {(availableTimes || []).map(t => (
           <option key={t} value={t}>{t}</option>
         ))}
       </select>
+      {errors.time && <span className="error">{errors.time}</span>}
 
       <label htmlFor="guests">Number of guests</label>
       <input
@@ -48,20 +65,24 @@ function BookingForm({ availableTimes, date, setDate }) {
         id="guests"
         value={guests}
         onChange={e => setGuests(Number(e.target.value))}
+        required
       />
+      {errors.guests && <span className="error">{errors.guests}</span>}
 
       <label htmlFor="occasion">Occasion</label>
       <select
         id="occasion"
         value={occasion}
         onChange={e => setOccasion(e.target.value)}
+        required
       >
         <option value="">Select</option>
         <option value="Birthday">Birthday</option>
         <option value="Anniversary">Anniversary</option>
       </select>
+      {errors.occasion && <span className="error">{errors.occasion}</span>}
 
-      <input type="submit" value="Make Your reservation" />
+      <input type="submit" value="Make Your reservation" disabled={!isFormValid} />
     </form>
   );
 }

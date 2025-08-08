@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChakraProvider } from '@chakra-ui/react'
-import { TaskList } from "./components/TaskList";
+
 import BookingForm from "./components/BookingForm";
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import {lemon_logo} from "./assets/little-lemon.png"
@@ -17,11 +17,6 @@ import "./App.css"
 
 
 function App() {
-
-  const [tasks, setTasks] = useState([
-    { id: 1, task: "Go shopping", done: true },
-    { id: 2, task: "Wash dishes", done: false },
-  ]);
 
   return (
     <Router>
