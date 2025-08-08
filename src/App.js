@@ -11,6 +11,7 @@ import Menu from "./components/Menu";
 import Contact from "./components/Contact";
 import { Link as RouterLink } from "react-router-dom";
 import BookForm from "./components/BookingForm";
+import Main from "./components/Main";
 import "./App.css"
 
 
@@ -29,7 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/booking" element={<BookingForm />} />
+        <Route path="/booking" element={<Main />} />
       </Routes>
     </Router>
   )
